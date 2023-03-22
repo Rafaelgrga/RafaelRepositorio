@@ -1,40 +1,42 @@
 import pygame
 import random
 from dino_runner.components.obstacles.cactus import Cactus
-from dino_runner.components.obstacles.bird import Bird
-from dino_runner.utils.constants import SMALL_CACTUS, LARGE_CACTUS, BIRD, BIRD_RED, BIRD_GREEN, BIRD_BLUE, DEATH_SOUND
+from dino_runner.components.obstacles.monster import Monster
+from dino_runner.utils.constants import LARGE_CANO, DEATH_SOUND, TORTUGA, TURTLE, BIRD
 
 class ObstacleManager:
 
     def __init__(self):
-        self.Bird_choice = [BIRD, BIRD_RED, BIRD_GREEN, BIRD_BLUE]
+        self.Bird_choice = [BIRD, TORTUGA]
         self.obstacles = []
-
-    ### adicionei o random para escolher entre um dos obstaculo
-    ### a cada um objeto sai da screen, ele faz um sorteio entre
-    ### 0 a 2 e escolhe um obstaculo para mostrar.
+        
+        
     def update(self,game):
         self.sorteio = random.randint(0, 2)
-
         if len(self.obstacles) == 0:
             if self.sorteio == 0:
-                self.obstacles.append(Cactus(SMALL_CACTUS, 325))
+                obstacle = (Cactus(LARGE_CANO, 390))
             elif self.sorteio == 1:
-                self.obstacles.append(Cactus(LARGE_CACTUS, 300))
+                obstacle = (Monster(random.choice(self.Bird_choice), random.randint(350, 400)))
             elif self.sorteio == 2:
-                self.obstacles.append(Bird(random.choice(self.Bird_choice)))
+                obstacle = (Monster(TURTLE, 430))
+
+            self.obstacles.append(obstacle)
 
         for obstacle in self.obstacles:
             obstacle.update(game.game_speed, self.obstacles)
+    
             if game.player.dino_rect.colliderect(obstacle.rect):
-                DEATH_SOUND.play()
-                pygame.mixer.music.stop()
-                game.death_count += 1
-                pygame.time.delay(500)
-                game.playing = False
-                break
-
-
+                if not game.player.has_power_up:
+                    DEATH_SOUND.play()
+                    pygame.mixer.music.stop()
+                    game.death_count += 1
+                    pygame.time.delay(500)
+                    game.playing = False
+                    break
+                else:
+                    self.obstacles.remove(obstacle)
+                    
     def draw(self, screen):
         for obstacle in self.obstacles:
             obstacle.draw(screen)

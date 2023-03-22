@@ -1,87 +1,17 @@
 import pygame
 import os
-import random
 
 # Global Constants
-TITLE = "Dino Runner"
+TITLE = "Mario Runner"
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 1100
 FPS = 30
 FONT_STYLE = "freesansbold.ttf"
 
+DEFAULT_TYPE = "default"
+STAR_TYPE = "star"
+
 IMG_DIR = os.path.join(os.path.dirname(__file__), "..", "assets")
-
-# Assets Constants
-ICON = pygame.image.load(os.path.join(IMG_DIR, "DinoWallpaper.png"))
-
-RUNNING = [
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoRun1.png")),
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoRun2.png")),
-]
-
-RUNNING_SHIELD = [
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoRun1Shield.png")),
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoRun2.png")),
-]
-
-RUNNING_HAMMER = [
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck1Hammer.png")),
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoRun2.png")),
-]
-
-JUMPING = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoJump.png"))
-JUMPING_SHIELD = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoJumpShield.png"))
-JUMPING_HAMMER = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoJumpHammer.png"))
-
-DUCKING = [
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck1.png")),
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck2.png")),
-]
-
-DUCKING_SHIELD = [
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck1Shield.png")),
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck2.png")),
-]
-
-DUCKING_HAMMER = [
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck1Hammer.png")),
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck2.png")),
-]
-
-SMALL_CACTUS = [
-    pygame.image.load(os.path.join(IMG_DIR, "Cactus/SmallCactus1.png")),
-    pygame.image.load(os.path.join(IMG_DIR, "Cactus/SmallCactus2.png")),
-    pygame.image.load(os.path.join(IMG_DIR, "Cactus/SmallCactus3.png")),
-]
-LARGE_CACTUS = [
-    pygame.image.load(os.path.join(IMG_DIR, "Cactus/LargeCactus1.png")),
-    pygame.image.load(os.path.join(IMG_DIR, "Cactus/LargeCactus2.png")),
-    pygame.image.load(os.path.join(IMG_DIR, "Cactus/LargeCactus3.png")),
-]
-
-BIRD = [
-    pygame.image.load(os.path.join(IMG_DIR, "Bird/Bird1.png")),
-    pygame.image.load(os.path.join(IMG_DIR, "Bird/Bird2.png")),
-]
-
-BIRD_RED = [
-    pygame.image.load(os.path.join(IMG_DIR, "Bird/Bird_red1.png")),
-    pygame.image.load(os.path.join(IMG_DIR, "Bird/Bird_red2.png")),
-]
-
-BIRD_GREEN = [
-    pygame.image.load(os.path.join(IMG_DIR, "Bird/Bird_green1.png")),
-    pygame.image.load(os.path.join(IMG_DIR, "Bird/Bird_green2.png")),
-]
-
-BIRD_BLUE = [
-    pygame.image.load(os.path.join(IMG_DIR, "Bird/Bird_blue1.png")),
-    pygame.image.load(os.path.join(IMG_DIR, "Bird/Bird_blue2.png")),
-]
-
-CLOUD = pygame.image.load(os.path.join(IMG_DIR, 'Other/Cloud.png'))
-SHIELD = pygame.image.load(os.path.join(IMG_DIR, 'Other/shield.png'))
-HAMMER = pygame.image.load(os.path.join(IMG_DIR, 'Other/hammer.png'))
 
 #Musics do game
 pygame.mixer.init()
@@ -93,11 +23,67 @@ pygame.mixer.music.set_volume(0.15)
 DEATH_SOUND.set_volume(0.15) 
 JUMP_SOUND.set_volume(0.15)
 
+# Assets Constants
+ICON = pygame.image.load(os.path.join(IMG_DIR, "Mario_icon.png"))
+
+RUNNING_STAR = [
+    pygame.image.load(os.path.join(IMG_DIR, "Mario/Mario_star1.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Mario/Mario_star2.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Mario/Mario_star3.png"))
+]
 
 
-BG = pygame.image.load(os.path.join(IMG_DIR, 'Other/Track.png'))
+JUMPING_STAR = pygame.image.load(os.path.join(IMG_DIR, "Mario/Mario_JumpStar.png"))
 
+DUCKING_STAR = [
+    pygame.image.load(os.path.join(IMG_DIR, "Mario/Mario_DuckStar1.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Mario/Mario_DuckStar2.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Mario/Mario_DuckStar3.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Mario/Mario_DuckStar4.png"))
+]
 
+LARGE_CANO = [
+    pygame.image.load(os.path.join(IMG_DIR, "Mario/largeCano1.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Mario/largeCano2.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Mario/largeCano3.png")),
+]
+
+BIRD = [
+    pygame.image.load(os.path.join(IMG_DIR, "Bird/bird1.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Bird/bird2.png")),
+]
+
+MARIO_RUN = [
+    pygame.image.load(os.path.join(IMG_DIR, "Mario/Mario_run1.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Mario/Mario_run2.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Mario/Mario_run3.png")),
+]
+
+MARIO_JUMP = pygame.image.load(os.path.join(IMG_DIR, "Mario/Mario_jump.png"))
+
+MARIO_DUCK = [
+    pygame.image.load(os.path.join(IMG_DIR, "Mario/Mario_duck1.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Mario/Mario_duck2.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Mario/Mario_duck3.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Mario/Mario_duck4.png")),
+]
+
+TORTUGA = [
+    pygame.image.load(os.path.join(IMG_DIR, "Mario/tortuga_fly1.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Mario/tortuga_fly2.png")),
+]
+
+TURTLE = [
+    pygame.image.load(os.path.join(IMG_DIR, "Mario/turtle1.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Mario/turtle2.png")),
+]
+
+TITLE_IMAGE = pygame.image.load(os.path.join(IMG_DIR, "Title/title.png"))
+CLOUD = pygame.image.load(os.path.join(IMG_DIR, 'Other/Cloud.png'))
+STAR = pygame.image.load(os.path.join(IMG_DIR, 'Other/star.png'))
+MUSHROOM = pygame.image.load(os.path.join(IMG_DIR, 'Other/mushroom.png'))
+HAMMER = pygame.image.load(os.path.join(IMG_DIR, 'Other/hammer.png'))
+
+GAME_OVER = pygame.image.load(os.path.join(IMG_DIR, "Other/Mario_GameOver.png"))
+BG = pygame.image.load(os.path.join(IMG_DIR, 'Mario/floor.png'))
 HEART = pygame.image.load(os.path.join(IMG_DIR, 'Other/SmallHeart.png'))
-
-DEFAULT_TYPE = "default"
