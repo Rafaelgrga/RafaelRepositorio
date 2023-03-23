@@ -38,9 +38,9 @@ class Game:
         pygame.quit()
 
     def run(self):
-        # Game loop: events - update - draw
         self.playing = True
-        self.reset_game()
+        pygame.mixer.music.play(-1)
+        #self.reset_game()
         while self.playing:
             self.events()
             self.update()
@@ -52,8 +52,6 @@ class Game:
         self.power_up_manager.reset_power_ups()
         self.obstacle_manager.vida = 100
         self.player = Dinosaur()
-
-        pygame.mixer.music.play(-1)
 
     def events(self):
         for event in pygame.event.get():
@@ -170,6 +168,7 @@ class Game:
     
     def difficult_change(self, game_speed):
         self.game_speed = game_speed
+        self.reset_game()
         self.run()
 
     def handle_events_on_menu(self):
@@ -185,6 +184,7 @@ class Game:
                 elif pygame.key.get_pressed()[pygame.K_3] and self.death_count == 0:
                     self.difficult_change(40)
                 elif pygame.key.get_pressed()[pygame.K_c] and self.death_count >= 1:
+                    self.obstacle_manager.vida = 100
                     self.run()
                 elif pygame.key.get_pressed()[pygame.K_s] and self.death_count >= 1:
                     self.game_speed = 20

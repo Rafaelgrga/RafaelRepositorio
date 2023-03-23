@@ -83,8 +83,6 @@ CLOUD = pygame.image.load(os.path.join(IMG_DIR, 'Other/Cloud.png'))
 STAR = pygame.image.load(os.path.join(IMG_DIR, 'Other/star.png'))
 MUSHROOM = pygame.image.load(os.path.join(IMG_DIR, 'Other/mushroom.png'))
 MUSHROOM_GREEN = pygame.image.load(os.path.join(IMG_DIR, 'Other/mushroom_green.png'))
-HAMMER = pygame.image.load(os.path.join(IMG_DIR, 'Other/hammer.png'))
 
 GAME_OVER = pygame.image.load(os.path.join(IMG_DIR, "Other/Mario_GameOver.png"))
 BG = pygame.image.load(os.path.join(IMG_DIR, 'Mario/floor.png'))
-HEART = pygame.image.load(os.path.join(IMG_DIR, 'Other/SmallHeart.png'))

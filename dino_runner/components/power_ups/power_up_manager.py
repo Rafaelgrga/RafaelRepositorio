@@ -8,9 +8,9 @@ class PowerUpManager:
         self.stars = []
         self.mushrooms = []
         self.green_mushrooms = []
-        self.when_appears = 50
+        self.when_appears = 130
         self.when_mush_appears = 200
-        self.when_mushgreen_appears = 150
+        self.when_mushgreen_appears = 50
     
     def star_power_up(self, score):
         if len(self.stars) == 0 and self.when_appears == score:
@@ -47,8 +47,7 @@ class PowerUpManager:
 
         for mushroom in self.mushrooms:
             if player.dino_rect.colliderect(mushroom.rect):
-                mushroom.start_time = pygame.time.get_ticks()
-                game.game_speed = 10
+                game.game_speed -= 10
                 self.mushrooms.remove(mushroom)
             else:
                 mushroom.update(game.game_speed, self.mushrooms)
@@ -58,7 +57,6 @@ class PowerUpManager:
         for mushroomGreen in self.green_mushrooms:
             
             if player.dino_rect.colliderect(mushroomGreen.rect):
-                mushroomGreen.start_time = pygame.time.get_ticks()
                 player.life_up = True
                 self.green_mushrooms.remove(mushroomGreen)
             else:
@@ -75,6 +73,9 @@ class PowerUpManager:
             green_mushroom.draw(screen)
     
     def reset_power_ups(self):
+        self.when_appears = 130
+        self.when_mush_appears = 200
+        self.when_mushgreen_appears = 50
         self.stars.clear()
         self.mushrooms.clear()
         self.green_mushrooms.clear()
