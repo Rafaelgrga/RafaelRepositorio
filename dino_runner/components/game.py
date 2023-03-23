@@ -5,7 +5,6 @@ from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.cloud import Cloud
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.components.power_ups.power_up_manager import PowerUpManager
-from dino_runner.components.power_ups.mushroom_manager import MushroomManager
 
 class Game:
     def __init__(self):
@@ -28,8 +27,6 @@ class Game:
         self.obstacle_manager = ObstacleManager()
         self.cloud = Cloud()
         self.power_up_manager = PowerUpManager()
-        self.mushroom_manager = MushroomManager()
-        
         
     def execute(self):
         self.executing = True
@@ -49,12 +46,12 @@ class Game:
             self.update()
             self.draw()
         
-    
     def reset_game(self):
-        self.player = Dinosaur()
+
         self.obstacle_manager.reset_obstacles()
         self.power_up_manager.reset_power_ups()
-        self.mushroom_manager.reset_power_ups()
+        self.obstacle_manager.vida = 100
+        self.player = Dinosaur()
 
         pygame.mixer.music.play(-1)
 
@@ -71,28 +68,35 @@ class Game:
         self.obstacle_manager.update(self)
 
         self.power_up_manager.update(self)
-        self.mushroom_manager.update(self)
         self.update_points()
+        self.life_points()
         self.cloud.update(self.game_speed)
+
+    def life_points(self):
+        self.mostrar_vida = self.font.render(f"Life: {self.obstacle_manager.vida} / 100", True, (0, 0, 0))
+        self.screen.blit(self.mostrar_vida, (50, 50))
+        if self.obstacle_manager.vida > 100:
+            self.obstacle_manager.vida = 100
+        
+    def life_up(self):
+        if self.player.life_up:
+            self.obstacle_manager.vida += 40
+            self.player.life_up = False
     
-    # A cada 100 pontos o game fica mais rápido
     def update_points(self):
         self.score += 1
         if self.score % 100 == 0:
             self.game_speed += 3
     
-    # Contador de pontos durante o jogo
     def points(self):
         self.mos_pontos = self.font.render(f"Points: {self.score}", True, (0, 0, 0))
         self.screen.blit(self.mos_pontos, (900, 50))
 
-    # Armazena a pontuação maxima
     def max_points(self):
         self.max_scores.append(self.score)
         self.points_rank = self.font.render(f'Max Points: {max(self.max_scores)}', True, (0,0,0))
         self.screen.blit(self.points_rank, (600, 50))
     
-    # Contador de mortes
     def count_death(self):
         self.count_morte = self.font.render(f'Death: {self.death_count}',True, (0,0,0))
                
@@ -105,10 +109,11 @@ class Game:
         self.count_death()
         self.player.draw(self.screen)
         self.draw_power_up_time()
+        self.life_points()
+        self.life_up()
 
         self.obstacle_manager.draw(self.screen)
         self.power_up_manager.draw(self.screen)
-        self.mushroom_manager.draw(self.screen)
         self.cloud.draw(self.screen)
         pygame.display.update()
         pygame.display.flip()
@@ -116,7 +121,7 @@ class Game:
     def draw_power_up_time(self):
         if self.player.has_power_up:
             time_to_show = round((self.player.power_up_time_up - pygame.time.get_ticks())/1000, 2)
-            
+
             if time_to_show >=0:
                 font = pygame.font.Font(FONT_STYLE, 22)
                 text = font.render(f"Power Up: {time_to_show}", True, (255,0,0))
@@ -137,7 +142,6 @@ class Game:
             self.x_pos_bg = 0
         self.x_pos_bg -= self.game_speed
 
-    
     def mostrar_texto(self, texto, pos_x, pos_y):
         text = self.font.render(texto, True, (0,0,0))
         text_rect = text.get_rect()
@@ -154,8 +158,7 @@ class Game:
             self.mostrar_texto("Choose a difficult to Start Game(Only Numbers)", half_screen_width, half_screen_height - 50)
             self.mostrar_texto("1 - Easy     2 - Medium     3 - Hard", half_screen_width, half_screen_height)
         else:
-            self.screen.fill((255,255,255))
-            self.screen.blit(GAME_OVER, (half_screen_width - 125, half_screen_height - 105))
+            self.screen.blit(GAME_OVER, (0, 0))
             self.mostrar_texto("Press (S) to return menu", half_screen_width, half_screen_height + 165)
             self.mostrar_texto("Press (C) to continue playing", half_screen_width, half_screen_height + 195)
             self.screen.blit(self.mos_pontos, (half_screen_width - 450, half_screen_height - 250))
@@ -163,7 +166,6 @@ class Game:
             self.screen.blit(self.count_morte, (half_screen_width - 450, half_screen_height - 190))
 
         pygame.display.update()
-
         self.handle_events_on_menu()
     
     def difficult_change(self, game_speed):
@@ -188,4 +190,3 @@ class Game:
                     self.game_speed = 20
                     self.score = 0
                     self.death_count = 0
-

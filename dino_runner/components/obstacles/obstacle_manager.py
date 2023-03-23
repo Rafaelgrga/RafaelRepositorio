@@ -2,14 +2,14 @@ import pygame
 import random
 from dino_runner.components.obstacles.cactus import Cactus
 from dino_runner.components.obstacles.monster import Monster
-from dino_runner.utils.constants import LARGE_CANO, DEATH_SOUND, TORTUGA, TURTLE, BIRD
+from dino_runner.utils.constants import LARGE_CANO, DEATH_SOUND, TORTUGA, TURTLE, BIRD, HIT
 
 class ObstacleManager:
 
     def __init__(self):
         self.Bird_choice = [BIRD, TORTUGA]
         self.obstacles = []
-        
+        self.vida = 100
         
     def update(self,game):
         self.sorteio = random.randint(0, 2)
@@ -28,13 +28,18 @@ class ObstacleManager:
     
             if game.player.dino_rect.colliderect(obstacle.rect):
                 if not game.player.has_power_up:
-                    DEATH_SOUND.play()
-                    pygame.mixer.music.stop()
-                    game.death_count += 1
-                    pygame.time.delay(500)
-                    game.playing = False
-                    break
+                    self.vida -= 40
+                    HIT.play()
+                    self.obstacles.pop()
+                    if self.vida < 0:
+                        DEATH_SOUND.play()
+                        pygame.mixer.music.stop()
+                        game.death_count += 1
+                        pygame.time.delay(500)
+                        game.playing = False
+                        break
                 else:
+                    HIT.play()
                     self.obstacles.remove(obstacle)
                     
     def draw(self, screen):

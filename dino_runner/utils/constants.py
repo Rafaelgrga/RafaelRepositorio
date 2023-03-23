@@ -13,11 +13,11 @@ STAR_TYPE = "star"
 
 IMG_DIR = os.path.join(os.path.dirname(__file__), "..", "assets")
 
-#Musics do game
 pygame.mixer.init()
 SOUND = pygame.mixer.music.load(os.path.join(IMG_DIR, "Sounds/BoxCat Games - CPU Talk.mp3"))
 JUMP_SOUND = pygame.mixer.Sound(os.path.join(IMG_DIR, "Sounds/8bit-jump.mp3"))
 DEATH_SOUND = pygame.mixer.Sound(os.path.join(IMG_DIR, "Sounds/pacman_death.mp3"))
+HIT = pygame.mixer.Sound(os.path.join(IMG_DIR, "Sounds/hit.mp3"))
 
 pygame.mixer.music.set_volume(0.15)
 DEATH_SOUND.set_volume(0.15) 
@@ -82,6 +82,7 @@ TITLE_IMAGE = pygame.image.load(os.path.join(IMG_DIR, "Title/title.png"))
 CLOUD = pygame.image.load(os.path.join(IMG_DIR, 'Other/Cloud.png'))
 STAR = pygame.image.load(os.path.join(IMG_DIR, 'Other/star.png'))
 MUSHROOM = pygame.image.load(os.path.join(IMG_DIR, 'Other/mushroom.png'))
+MUSHROOM_GREEN = pygame.image.load(os.path.join(IMG_DIR, 'Other/mushroom_green.png'))
 HAMMER = pygame.image.load(os.path.join(IMG_DIR, 'Other/hammer.png'))
 
 GAME_OVER = pygame.image.load(os.path.join(IMG_DIR, "Other/Mario_GameOver.png"))

@@ -1,42 +1,83 @@
 import random
 import pygame
 
-from dino_runner.components.power_ups.star import Star
-
+from dino_runner.components.power_ups.star import Star, Mushroom, MushroomGreen
 
 class PowerUpManager:
     def __init__(self):
-        self.power_ups = []
-        self.when_appears = 0
+        self.stars = []
+        self.mushrooms = []
+        self.green_mushrooms = []
+        self.when_appears = 50
+        self.when_mush_appears = 200
+        self.when_mushgreen_appears = 150
     
-    def generate_power_up(self, score):
-        
-        if len(self.power_ups) == 0 and self.when_appears == score:
-            self.when_appears += random.randint(150,250)
-            self.power_ups.append(Star())
+    def star_power_up(self, score):
+        if len(self.stars) == 0 and self.when_appears == score:
+            self.when_appears += random.randint(200, 300)
+            self.stars.append(Star())
+
+    def mushroom_power_up(self, score):
+        if len(self.mushrooms) == 0 and self.when_mush_appears == score:
+            self.when_mush_appears += random.randint(400, 500)
+            self.mushrooms.append(Mushroom())
+
+    def mushroom_life_up(self, score):
+        if len(self.green_mushrooms) == 0 and self.when_mushgreen_appears == score:
+            self.when_mushgreen_appears += random.randint(250, 300)
+            self.green_mushrooms.append(MushroomGreen()) 
 
     def update(self, game):
-        self.generate_power_up(game.score)
-    
-        for power_up in self.power_ups:
-            power_up.update(game.game_speed, self.power_ups)
+        player = game.player
+        self.star_power_up(game.score)
 
-            player = game.player
-            if player.dino_rect.colliderect(power_up.rect):
-                power_up.start_time = pygame.time.get_ticks()#
+        for star in self.stars:
+
+            if player.dino_rect.colliderect(star.rect):
+                star.start_time = pygame.time.get_ticks()
                 player.shield = True
                 player.has_power_up = True
-                player.type = power_up.type#tipo de image que estaria utilizando
-                player.power_up_time_up = power_up.start_time + (power_up.duration * 1000)
-                self.power_ups.remove(power_up)
+                player.type = star.type
+                player.power_up_time_up = star.start_time + (star.duration * 1000)
+                self.stars.remove(star)
+            else:
+                star.update(game.game_speed, self.stars)
+            
+        self.mushroom_power_up(game.score)
+
+        for mushroom in self.mushrooms:
+            if player.dino_rect.colliderect(mushroom.rect):
+                mushroom.start_time = pygame.time.get_ticks()
+                game.game_speed = 10
+                self.mushrooms.remove(mushroom)
+            else:
+                mushroom.update(game.game_speed, self.mushrooms)
+                
+        self.mushroom_life_up(game.score)
+
+        for mushroomGreen in self.green_mushrooms:
+            
+            if player.dino_rect.colliderect(mushroomGreen.rect):
+                mushroomGreen.start_time = pygame.time.get_ticks()
+                player.life_up = True
+                self.green_mushrooms.remove(mushroomGreen)
+            else:
+                mushroomGreen.update(game.game_speed, self.green_mushrooms)
     
     def draw(self, screen):
-        for power_up in self.power_ups:
-            power_up.draw(screen)
+        for star in self.stars:
+            star.draw(screen)
+
+        for mushroom in self.mushrooms:
+            mushroom.draw(screen)
+
+        for green_mushroom in self.green_mushrooms:
+            green_mushroom.draw(screen)
     
     def reset_power_ups(self):
-        self.power_ups.clear()
-        self.when_appears = random.randint(200,300)
+        self.stars.clear()
+        self.mushrooms.clear()
+        self.green_mushrooms.clear()
             
     
     
