@@ -28,9 +28,8 @@ class ObstacleManager:
     
             if game.player.dino_rect.colliderect(obstacle.rect):
                 if not game.player.has_power_up:
-                    self.vida -= 40
+                    self.vida -= 1
                     HIT.play()
-                    self.obstacles.pop()
                     if self.vida < 0:
                         DEATH_SOUND.play()
                         pygame.mixer.music.stop()
